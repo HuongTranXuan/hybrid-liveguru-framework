@@ -30,18 +30,14 @@ public class User_01_Register_To_System {
 			driver = new ChromeDriver();
 		}
 
-		System.out.println("browser: " + browser);
-		// Open App Url
 		driver.get("http://live.demoguru99.com/");
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@BeforeMethod
 	public void beforeMethod() {
-		// Open My Account Page
 		driver.findElement(By.xpath("//div[@class='footer']//a[contains(text(),'My Account')]")).click();
 
-		// Open Register page
 		driver.findElement(By.xpath("//a[@title='Create an Account']")).click();
 	}
 
