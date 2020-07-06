@@ -1,6 +1,9 @@
 package com.liveguru.users;
 
 import org.testng.annotations.Test;
+
+import commons.AbstractPage;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
@@ -18,7 +21,7 @@ import org.testng.annotations.AfterClass;
 public class User_01_Register_To_System {
 
 	WebDriver driver;
-
+	
 	@Parameters("browser")
 	@BeforeClass
 	public void beforeClass(String browser) {
@@ -31,11 +34,12 @@ public class User_01_Register_To_System {
 		}
 
 		driver.get("http://live.demoguru99.com/");
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 	}
 
 	@BeforeMethod
 	public void beforeMethod() {
+		driver.findElement(By.xpath("//div[@class='footer']//a[contains(text(),'My Account')]")).click();;
 		driver.findElement(By.xpath("//div[@class='footer']//a[contains(text(),'My Account')]")).click();
 
 		driver.findElement(By.xpath("//a[@title='Create an Account']")).click();
