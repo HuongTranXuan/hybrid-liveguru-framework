@@ -18,10 +18,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 
-public class User_01_Register_To_System {
+public class User_01_Register_To_System extends AbstractPage {
 
 	WebDriver driver;
-	
+
 	@Parameters("browser")
 	@BeforeClass
 	public void beforeClass(String browser) {
@@ -33,78 +33,72 @@ public class User_01_Register_To_System {
 			driver = new ChromeDriver();
 		}
 
-		driver.get("http://live.demoguru99.com/");
-		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
+		openPageUrl(driver, "http://live.demoguru99.com/");
+		setImplicitWait(driver, 20);
 	}
 
 	@BeforeMethod
 	public void beforeMethod() {
-		driver.findElement(By.xpath("//div[@class='footer']//a[contains(text(),'My Account')]")).click();;
-		driver.findElement(By.xpath("//div[@class='footer']//a[contains(text(),'My Account')]")).click();
-
-		driver.findElement(By.xpath("//a[@title='Create an Account']")).click();
+		clickToElement(driver, "//div[@class='footer']//a[contains(text(),'My Account')]");
+		clickToElement(driver, "//a[@title='Create an Account']");
 	}
 
 	@Test
 	public void Register_01_Empty_Data() {
-		driver.findElement(By.xpath("//button[@title='Register']")).click();
+		clickToElement(driver, "//button[@title='Register']");
 
 		// verify error message
-		Assert.assertEquals(driver.findElement(By.xpath("//div[@id='advice-required-entry-firstname']")).getText(),
+		Assert.assertEquals(getElementText(driver, "//div[@id='advice-required-entry-firstname']"),
 				"This is a required field.");
-		Assert.assertEquals(driver.findElement(By.xpath("//div[@id='advice-required-entry-lastname']")).getText(),
+		Assert.assertEquals(getElementText(driver, "//div[@id='advice-required-entry-lastname']"),
 				"This is a required field.");
-		Assert.assertEquals(driver.findElement(By.xpath("//div[@id='advice-required-entry-email_address']")).getText(),
+		Assert.assertEquals(getElementText(driver, "//div[@id='advice-required-entry-email_address']"),
 				"This is a required field.");
-		Assert.assertEquals(driver.findElement(By.xpath("//div[@id='advice-required-entry-password']")).getText(),
+		Assert.assertEquals(getElementText(driver, "//div[@id='advice-required-entry-password']"),
 				"This is a required field.");
-		Assert.assertEquals(driver.findElement(By.xpath("//div[@id='advice-required-entry-confirmation']")).getText(),
+		Assert.assertEquals(getElementText(driver, "//div[@id='advice-required-entry-confirmation']"),
 				"This is a required field.");
 
 	}
 
 	@Test
 	public void Register_02_Invalid_Email() {
-		driver.findElement(By.xpath("//input[@id='email_address']")).sendKeys("email012.123@123");
-		driver.findElement(By.xpath("//button[@title='Register']")).click();
-
-		Assert.assertEquals(driver.findElement(By.xpath("//div[@id='advice-validate-email-email_address']")).getText(),
+		sendKeyToElement(driver, "//input[@id='email_address']", "email012.123@123");
+		clickToElement(driver, "//button[@title='Register']");
+		
+		Assert.assertEquals(getElementText(driver, "//div[@id='advice-validate-email-email_address']"),
 				"Please enter a valid email address. For example johndoe@domain.com.");
 	}
 
 	@Test
 	public void Register_03_Password_Less_Than_6_Character() {
-		driver.findElement(By.xpath("//input[@id='password']")).sendKeys("123");
-		driver.findElement(By.xpath("//button[@title='Register']")).click();
+		sendKeyToElement(driver, "//input[@id='password']", "123");
+		clickToElement(driver, "//button[@title='Register']");
 
-		Assert.assertEquals(driver.findElement(By.xpath("//div[@id='advice-validate-password-password']")).getText(),
+		Assert.assertEquals(getElementText(driver,"//div[@id='advice-validate-password-password']"),
 				"Please enter 6 or more characters without leading or trailing spaces.");
 	}
 
 	@Test
 	public void Register_04_Confirm_Password_Not_Matching_With_Password() {
-		driver.findElement(By.xpath("//input[@id='password']")).sendKeys("123123");
-		driver.findElement(By.xpath("//input[@id='confirmation']")).sendKeys("321321");
-		driver.findElement(By.xpath("//button[@title='Register']")).click();
+		sendKeyToElement(driver,"//input[@id='password']","123123");
+		sendKeyToElement(driver,"//input[@id='confirmation']","321321");
+		clickToElement(driver, "//button[@title='Register']");
 
-		Assert.assertEquals(
-				driver.findElement(By.xpath("//div[@id='advice-validate-cpassword-confirmation']")).getText(),
+		Assert.assertEquals(getElementText(driver,"//div[@id='advice-validate-cpassword-confirmation']"),
 				"Please make sure your passwords match.");
 	}
 
 	@Test
 	public void Register_05_Valid_Data() {
-		driver.findElement(By.xpath("//input[@id='firstname']")).sendKeys("Nam");
-		driver.findElement(By.xpath("//input[@id='lastname']")).sendKeys("Dang");
-		driver.findElement(By.xpath("//input[@id='email_address']"))
-				.sendKeys("nam.dang" + randomNumber() + "@gmail.com");
-		driver.findElement(By.xpath("//input[@id='password']")).sendKeys("123123");
-		driver.findElement(By.xpath("//input[@id='confirmation']")).sendKeys("123123");
-		driver.findElement(By.xpath("//button[@title='Register']")).click();
+		sendKeyToElement(driver,"//input[@id='firstname']","Nam");
+		sendKeyToElement(driver,"//input[@id='lastname']","Dang");
+		sendKeyToElement(driver,"//input[@id='email_address']","nam.dang" + randomNumber() + "@gmail.com");
+		sendKeyToElement(driver,"//input[@id='password']","123123");
+		sendKeyToElement(driver,"//input[@id='confirmation']","123123");
+		clickToElement(driver, "//button[@title='Register']");
 
-		Assert.assertEquals(driver
-				.findElement(By.xpath("//span[contains(text(),'Thank you for registering with Main Website Store.')]"))
-				.getText(), "Thank you for registering with Main Website Store.");
+		Assert.assertEquals(getElementText(driver,"//span[contains(text(),'Thank you for registering with Main Website Store.')]"), "Thank you for registering with Main Website Store.");
 	}
 
 	@AfterClass
