@@ -1,4 +1,4 @@
-package liveguru.pageObjects;
+package pageObjects.liveguru;
 
 public class RegisterPageObject {
 	//7 event

@@ -1,4 +1,4 @@
-package liveguru.pageUIs;
+package pageUIs.liveguru;
 
 public class RegisterPageUI {
 	//Giao dien 

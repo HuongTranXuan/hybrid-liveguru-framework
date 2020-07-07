@@ -29,8 +29,6 @@ public class User_02_Login_To_System {
 			driver = new ChromeDriver();
 		}
 
-		System.out.println("browser: " + browser);
-		// Open App Url
 		driver.get("http://live.demoguru99.com/");
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
