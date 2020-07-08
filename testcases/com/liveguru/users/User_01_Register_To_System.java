@@ -3,12 +3,18 @@ package com.liveguru.users;
 import org.testng.annotations.Test;
 
 import commons.AbstractPage;
+import pageObjects.liveguru.HomePageObject;
+import pageObjects.liveguru.LoginPageObject;
+import pageObjects.liveguru.MyDashboardPageObject;
+import pageObjects.liveguru.RegisterPageObject;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -18,6 +24,10 @@ import org.testng.annotations.AfterClass;
 public class User_01_Register_To_System extends AbstractPage {
 
 	WebDriver driver;
+	HomePageObject homePage;
+	LoginPageObject loginPage;
+	RegisterPageObject registerPage;
+	MyDashboardPageObject myDashboardPage;
 
 	@Parameters("browser")
 	@BeforeClass
@@ -29,73 +39,66 @@ public class User_01_Register_To_System extends AbstractPage {
 			System.setProperty("webdriver.chrome.driver", ".\\browserDrivers\\chromedriver.exe");
 			driver = new ChromeDriver();
 		}
-
-		openPageUrl(driver, "http://live.demoguru99.com/");
-		setImplicitWait(driver, 20);
+		
+		driver.get("http://live.demoguru99.com/");
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+//		openPageUrl(driver, "http://live.demoguru99.com/");
+//		setImplicitWait(driver, 20);
+		homePage = new HomePageObject(driver);
 	}
 
 	@BeforeMethod
 	public void beforeMethod() {
-		clickToElement(driver, "//div[@class='footer']//a[contains(text(),'My Account')]");
-		clickToElement(driver, "//a[@title='Create an Account']");
+		homePage.clickToMyAccountButton();
+		loginPage = new LoginPageObject(driver);
+		loginPage.clickToCreateAnAccountButton();
 	}
 
 	@Test
 	public void Register_01_Empty_Data() {
-		clickToElement(driver, "//button[@title='Register']");
+		registerPage = new RegisterPageObject(driver);
+		registerPage.clickToRegisterButton("//button[@title='Register']");
 
-		// verify error message
-		Assert.assertEquals(getElementText(driver, "//div[@id='advice-required-entry-firstname']"),
-				"This is a required field.");
-		Assert.assertEquals(getElementText(driver, "//div[@id='advice-required-entry-lastname']"),
-				"This is a required field.");
-		Assert.assertEquals(getElementText(driver, "//div[@id='advice-required-entry-email_address']"),
-				"This is a required field.");
-		Assert.assertEquals(getElementText(driver, "//div[@id='advice-required-entry-password']"),
-				"This is a required field.");
-		Assert.assertEquals(getElementText(driver, "//div[@id='advice-required-entry-confirmation']"),
-				"This is a required field.");
+		Assert.assertEquals(registerPage.getRequiredErrorMessageAtFirstnameTextbox(),"This is a required field.");
+		Assert.assertEquals(registerPage.getRequiredErrorMessageAtLastnameTextbox(),"This is a required field.");
+		Assert.assertEquals(registerPage.getRequiredErrorMessageAtEmailTextbox(),"This is a required field.");
+		Assert.assertEquals(registerPage.getRequiredErrorMessageAtPasswordTextbox(),"This is a required field.");
+		Assert.assertEquals(registerPage.getRequiredErrorMessageAtConfirmPasswordTextbox(),"This is a required field.");
 
 	}
 
 	@Test
 	public void Register_02_Invalid_Email() {
-		sendKeyToElement(driver, "//input[@id='email_address']", "email012.123@123");
-		clickToElement(driver, "//button[@title='Register']");
-		
-		Assert.assertEquals(getElementText(driver, "//div[@id='advice-validate-email-email_address']"),
-				"Please enter a valid email address. For example johndoe@domain.com.");
+		registerPage.inputToEmailTextbox("email012.123@123");
+		registerPage.clickToRegisterButton("//button[@title='Register']");
+		Assert.assertEquals(registerPage.getInvalidErrorMessageAtEmailTextbox(),"Please enter a valid email address. For example johndoe@domain.com.");
 	}
 
 	@Test
 	public void Register_03_Password_Less_Than_6_Character() {
-		sendKeyToElement(driver, "//input[@id='password']", "123");
-		clickToElement(driver, "//button[@title='Register']");
-
-		Assert.assertEquals(getElementText(driver,"//div[@id='advice-validate-password-password']"),
-				"Please enter 6 or more characters without leading or trailing spaces.");
+		registerPage.inputToPasswordTextbox("123");
+		registerPage.clickToRegisterButton("//button[@title='Register']");
+		Assert.assertEquals(registerPage.getInvalidErrorMessagePasswordTextbox(),"Please enter 6 or more characters without leading or trailing spaces.");
 	}
 
 	@Test
 	public void Register_04_Confirm_Password_Not_Matching_With_Password() {
-		sendKeyToElement(driver,"//input[@id='password']","123123");
-		sendKeyToElement(driver,"//input[@id='confirmation']","321321");
-		clickToElement(driver, "//button[@title='Register']");
-
-		Assert.assertEquals(getElementText(driver,"//div[@id='advice-validate-cpassword-confirmation']"),
-				"Please make sure your passwords match.");
+		registerPage.inputToPasswordTextbox("123123");
+		registerPage.inputToConfirmPasswordTextbox("321321");
+		registerPage.clickToRegisterButton("//button[@title='Register']");
+		Assert.assertEquals(registerPage.getInvalidErrorMessageConfirmPasswordTextbox(),"Please make sure your passwords match.");
 	}
 
 	@Test
 	public void Register_05_Valid_Data() {
-		sendKeyToElement(driver,"//input[@id='firstname']","Nam");
-		sendKeyToElement(driver,"//input[@id='lastname']","Dang");
-		sendKeyToElement(driver,"//input[@id='email_address']","nam.dang" + randomNumber() + "@gmail.com");
-		sendKeyToElement(driver,"//input[@id='password']","123123");
-		sendKeyToElement(driver,"//input[@id='confirmation']","123123");
-		clickToElement(driver, "//button[@title='Register']");
-
-		Assert.assertEquals(getElementText(driver,"//span[contains(text(),'Thank you for registering with Main Website Store.')]"), "Thank you for registering with Main Website Store.");
+		registerPage.inputToFirstnameTextbox("Nam");
+		registerPage.inputToLastnameTextbox("Dang");
+		registerPage.inputToEmailTextbox("nam.dang" + randomNumber() + "@gmail.com");
+		registerPage.inputToPasswordTextbox("123123");
+		registerPage.inputToConfirmPasswordTextbox("123123");
+		registerPage.clickToRegisterButton("//button[@title='Register']");
+		myDashboardPage = new MyDashboardPageObject(driver);
+		Assert.assertEquals(myDashboardPage.getWelcomeSuccessMessage(),"Thank you for registering with Main Website Store.");
 	}
 
 	@AfterClass
