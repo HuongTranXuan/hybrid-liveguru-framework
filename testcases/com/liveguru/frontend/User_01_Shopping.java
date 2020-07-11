@@ -13,6 +13,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import pageObjects.liveguru.CompareProductPageObject;
 import pageObjects.liveguru.HomePageObject;
 import pageObjects.liveguru.MobilePageObject;
 import pageObjects.liveguru.MyDashboardPageObject;
@@ -28,6 +29,7 @@ public class User_01_Shopping {
 	MobilePageObject mobilePage;
 	ProductDetailPageObject productDetailPage;
 	ShoppingCartPageObject shoppingCartPage;
+	CompareProductPageObject comparePage;
 	String firstname = "", lastname = "", email = "";
 
 	@Parameters("browser")
@@ -88,7 +90,6 @@ public class User_01_Shopping {
 		mobilePage = new MobilePageObject(driver);
 		String costOfProduct = mobilePage.getCostProduct("Sony Xperia");
 		mobilePage.clickToProduct("Sony Xperia");
-		System.out.println("Huong 2");
 		productDetailPage = new ProductDetailPageObject(driver);
 		Assert.assertEquals(costOfProduct, productDetailPage.getCost());
 		
@@ -106,18 +107,39 @@ public class User_01_Shopping {
 		Assert.assertEquals(shoppingCartPage.getSuccessMSG(), "Coupon code \"GURU50\" was applied.");
 		Assert.assertEquals(shoppingCartPage.getCouponCodeInTotal(), "DISCOUNT (GURU50)");
 		Assert.assertEquals(shoppingCartPage.getDiscountMoneyInTotal(), "-$25.00");
+		Assert.assertEquals(shoppingCartPage.getMoneyGrandTotal(), "$500.00");
 		
 	}
 
 	@Test
 	public void Shopping_05_Test_User_Add_More_Than_500_Items() {
-
+		homePage.clickToMobileMenu();
+		mobilePage = new MobilePageObject(driver);
+		mobilePage.clickAddToCartButton("Sony Xperia");
+		shoppingCartPage = new ShoppingCartPageObject(driver);
+		shoppingCartPage.inputQualtyProduct("501");
+		shoppingCartPage.clickButtonUpdate();
+		Assert.assertTrue(shoppingCartPage.getErrorItemMsg().contains("The maximum quantity allowed for purchase is 500."));
+		Assert.assertEquals(shoppingCartPage.getErrorMsgAddTooManyQty(), "Some of the products cannot be ordered in requested quantity.");
+		shoppingCartPage.clickEmtyCartLink();
+		Assert.assertEquals(shoppingCartPage.getErrorMsgEmptyCart(), "You have no items in your shopping cart.");
 	}
 
 	@Test
 	public void Shopping_06_Test_User_Can_Compare_Two_Products() {
-
-	}
+		homePage.clickToMobileMenu();
+		mobilePage = new MobilePageObject(driver);
+		mobilePage.clickAddToCompareLink("IPhone");
+		Assert.assertEquals(mobilePage.getSuccessMsg(), "The product IPhone has been added to comparison list.");
+		mobilePage.clickAddToCompareLink("Sony Xperia");
+		Assert.assertEquals(mobilePage.getSuccessMsg(), "The product Sony Xperia has been added to comparison list.");
+		
+		mobilePage.clickCompareButton();
+		mobilePage.switchToWindowCompare();
+		comparePage = new CompareProductPageObject(driver);
+		Assert.assertEquals(comparePage.getTextPage(), "COMPARE PRODUCTS");
+		comparePage.closeWindowCompare(mobilePage.getParentId());
+}
 
 	@Test
 	public void Shopping_07_Check_User_Can_Share_Wistlist_To_Other_People_Using_Email() {
@@ -147,5 +169,13 @@ public class User_01_Shopping {
 	public int randomNumber() {
 		Random random = new Random();
 		return random.nextInt(1000) + 1000;
+	}
+	public void sleepSeconds(long timeout) {
+		try {
+			Thread.sleep(timeout*1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
