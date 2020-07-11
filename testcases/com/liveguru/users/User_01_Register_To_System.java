@@ -52,11 +52,12 @@ public class User_01_Register_To_System extends AbstractPage {
 		homePage.clickToMyAccountButton();
 		loginPage = new LoginPageObject(driver);
 		loginPage.clickToCreateAnAccountButton();
+		registerPage = new RegisterPageObject(driver);
 	}
 
 	@Test
 	public void Register_01_Empty_Data() {
-		registerPage = new RegisterPageObject(driver);
+		
 		registerPage.clickToRegisterButton("//button[@title='Register']");
 
 		Assert.assertEquals(registerPage.getRequiredErrorMessageAtFirstnameTextbox(),"This is a required field.");
