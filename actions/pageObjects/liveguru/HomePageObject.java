@@ -32,4 +32,9 @@ public class HomePageObject extends AbstractPage {
 		waitElementClickable(driver, HomePageUI.ACCOUNT_MENU_LINK);
 		clickToElement(driver, HomePageUI.MOBILE_LINK);
 	}
+
+	public void clickToTVMenu() {
+		waitElementClickable(driver, HomePageUI.TV_LINK);
+		clickToElement(driver, HomePageUI.TV_LINK);
+	}
 }

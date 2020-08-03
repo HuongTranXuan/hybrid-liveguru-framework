@@ -22,5 +22,16 @@ public class CompareProductPageObject extends AbstractPage{
 		waitElementVisiable(driver, CompareProductPageUI.COMPARE_PRODUCT);
 		return getElementText(driver, CompareProductPageUI.COMPARE_PRODUCT);
 	}
+
+	public String getTextProductLeft() {
+		waitElementVisiable(driver, CompareProductPageUI.PRODUCT_TEXT_LEFT);
+		return getElementText(driver, CompareProductPageUI.PRODUCT_TEXT_LEFT);
+	}
+
+	public String getTextProductRight() {
+		waitElementVisiable(driver, CompareProductPageUI.PRODUCT_TEXT_RIGHT);
+		return getElementText(driver, CompareProductPageUI.PRODUCT_TEXT_RIGHT);
+	}
+
 	
 }

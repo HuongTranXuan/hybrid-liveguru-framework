@@ -19,4 +19,9 @@ public class ProductDetailPageObject extends AbstractPage{
 		return getElementText(driver,ProductDetailPageUI.COST);
 	}
 
+	public void clickAddReviewLink() {
+		waitElementClickable(driver, ProductDetailPageUI.ADD_YOUR_REVIEW_LINK);
+		clickToElement(driver, ProductDetailPageUI.ADD_YOUR_REVIEW_LINK);
+	}
+
 }

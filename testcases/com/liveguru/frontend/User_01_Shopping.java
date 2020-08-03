@@ -17,9 +17,13 @@ import pageObjects.liveguru.CompareProductPageObject;
 import pageObjects.liveguru.HomePageObject;
 import pageObjects.liveguru.MobilePageObject;
 import pageObjects.liveguru.MyDashboardPageObject;
+import pageObjects.liveguru.MyWishlistPageObject;
 import pageObjects.liveguru.ProductDetailPageObject;
+import pageObjects.liveguru.ProductReviewPageObject;
 import pageObjects.liveguru.RegisterPageObject;
 import pageObjects.liveguru.ShoppingCartPageObject;
+import pageObjects.liveguru.TVPageObject;
+import pageObjects.liveguru.WishlistSharingPageObject;
 
 public class User_01_Shopping {
 	WebDriver driver;
@@ -30,6 +34,10 @@ public class User_01_Shopping {
 	ProductDetailPageObject productDetailPage;
 	ShoppingCartPageObject shoppingCartPage;
 	CompareProductPageObject comparePage;
+	MyWishlistPageObject myWishlistPage;
+	TVPageObject tvPage;
+	WishlistSharingPageObject wishlistSharingPage;
+	ProductReviewPageObject productReviewPage;
 	String firstname = "", lastname = "", email = "";
 
 	@Parameters("browser")
@@ -73,7 +81,7 @@ public class User_01_Shopping {
 
 	}
 
-	@Test
+	@Test//(enabled = false)
 	public void Shopping_02_Verify_User_Infomation_Is_Correct() {
 		homePage.clickToMyAccountButton();
 		myDashboardPage = new MyDashboardPageObject(driver);
@@ -84,7 +92,7 @@ public class User_01_Shopping {
 
 	}
 
-	@Test
+	@Test//(enabled = false)
 	public void Shopping_03_Compare_Cost_Of_Product_With_Detail_Page() {
 		homePage.clickToMobileMenu();
 		mobilePage = new MobilePageObject(driver);
@@ -95,7 +103,7 @@ public class User_01_Shopping {
 		
 	}
 
-	@Test
+	@Test//(enabled = false)
 	public void Shopping_04_Check_Discount_Coupon_Work() {
 		homePage.clickToMobileMenu();
 		mobilePage = new MobilePageObject(driver);
@@ -111,7 +119,7 @@ public class User_01_Shopping {
 		
 	}
 
-	@Test
+	@Test//(enabled = false)
 	public void Shopping_05_Test_User_Add_More_Than_500_Items() {
 		homePage.clickToMobileMenu();
 		mobilePage = new MobilePageObject(driver);
@@ -125,7 +133,7 @@ public class User_01_Shopping {
 		Assert.assertEquals(shoppingCartPage.getErrorMsgEmptyCart(), "You have no items in your shopping cart.");
 	}
 
-	@Test
+	@Test//(enabled = false)
 	public void Shopping_06_Test_User_Can_Compare_Two_Products() {
 		homePage.clickToMobileMenu();
 		mobilePage = new MobilePageObject(driver);
@@ -138,22 +146,52 @@ public class User_01_Shopping {
 		mobilePage.switchToWindowCompare();
 		comparePage = new CompareProductPageObject(driver);
 		Assert.assertEquals(comparePage.getTextPage(), "COMPARE PRODUCTS");
+		Assert.assertEquals(comparePage.getTextProductLeft(),"SONY XPERIA" );
+		Assert.assertEquals(comparePage.getTextProductRight(),"IPHONE" );
 		comparePage.closeWindowCompare(mobilePage.getParentId());
 }
 
-	@Test
+	@Test//(enabled = false)
 	public void Shopping_07_Check_User_Can_Share_Wistlist_To_Other_People_Using_Email() {
-
+		homePage.clickToTVMenu();
+		tvPage = new TVPageObject(driver);
+		tvPage.clickAddToWishlist("LG LCD");
+		myWishlistPage = new MyWishlistPageObject(driver);
+		Assert.assertEquals(myWishlistPage.getAddtoWishlistSuccessMsg(), "LG LCD has been added to your wishlist. Click here to continue shopping.");
+		myWishlistPage.clickToShareWishlistButton();
+		wishlistSharingPage = new WishlistSharingPageObject(driver);
+		wishlistSharingPage.inputEmail(email);
+		wishlistSharingPage.inputMessage("Please share wishlist!");
+		wishlistSharingPage.clickToShareWLButton();
+		Assert.assertEquals(myWishlistPage.getAddtoWishlistSuccessMsg(), "Your Wishlist has been shared.");
 	}
 
 	@Test
 	public void Shopping_08_Test_User_Can_Add_Review() {
-
+		homePage.clickToTVMenu();
+		tvPage = new TVPageObject(driver);
+		tvPage.clickToProductDetail("Samsung LCD");
+		productDetailPage = new ProductDetailPageObject(driver);
+		productDetailPage.clickAddReviewLink();
+		productReviewPage = new ProductReviewPageObject(driver);
+		productReviewPage.inputReview("");
+		productReviewPage.inputSummaryReview("");
+		productReviewPage.inputName("");
+		productReviewPage.clickToSumitReviewButton();
+		Assert.assertEquals(productReviewPage.getReviewRequireMsg(), "THIS IS A REQUIRED FIELD.");
+		Assert.assertEquals(productReviewPage.getSummaryReviewRequireMsg(), "THIS IS A REQUIRED FIELD.");
+		Assert.assertEquals(productReviewPage.getNameRequireMsg(), "THIS IS A REQUIRED FIELD.");
+		productReviewPage.inputReview("Thoughts!!");
+		productReviewPage.inputSummaryReview("Goog!");
+		productReviewPage.inputName(firstname);
+		productReviewPage.clickToSumitReviewButton();
+		
+		Assert.assertEquals(productReviewPage.getAddReviewMsgSuccess() , "Your review has been accepted for moderation.");
 	}
 
 	@Test
 	public void Shopping_09_Test_User_Purchase_Product() {
-
+		
 	}
 
 	@Test
