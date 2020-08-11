@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suite name="Live Guru" parallel="false">
 	<test name="Run on Firefox">
-		<parameter name="browser" value="firefox" />
+		<parameter name="browser" value="chrome" />
 		<classes>
 			<!--  <class name="com.liveguru.users.User_01_Register_To_System" />-->
 			<class name ="com.liveguru.frontend.User_01_Shopping"/>
