@@ -40,7 +40,7 @@ public class MobilePageObject extends AbstractPage {
 		return getElementText(driver, MobilePageUI.SUCCESS_MSG);
 	}
 	public String getParentId() {
-		return MobilePageUI.MOBILE_PAGE_ID;
+		return driver.getWindowHandle();
 	}
 
 	public void clickToProduct(String productName) {
@@ -74,10 +74,8 @@ public class MobilePageObject extends AbstractPage {
 		String productLocatorFull = "";
 		List<WebElement> productNames = findElementsByXpath(driver, MobilePageUI.PRODUCT_NAMES);
 		for (WebElement element : productNames) {
-			System.out.println(element.getAttribute("title"));
 			if (element.getAttribute("title").equals(productName)) {
 				productLocatorFull = MobilePageUI.PRODUCT_FRONT + productName + MobilePageUI.PRODUCT_LINK_COMPARE_END;
-				System.out.println(productName+"2");
 				break;
 			}
 		}
@@ -91,7 +89,7 @@ public class MobilePageObject extends AbstractPage {
 	}
 
 	public void switchToWindowCompare() {
-		switchToWindowByID(driver, MobilePageUI.MOBILE_PAGE_ID);
+		switchToWindowByID(driver, driver.getWindowHandle());
 	}
 
 

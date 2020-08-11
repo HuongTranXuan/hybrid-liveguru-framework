@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -49,7 +50,12 @@ public class User_01_Shopping {
 		} else if (browser.equals("chrome")) {
 			System.setProperty("webdriver.chrome.driver", ".\\browserDrivers\\chromedriver.exe");
 			driver = new ChromeDriver();
+		}else if(browser.equals("edge")) {
+			System.setProperty("webdriver.edge.driver", ".\\browserDrivers\\msedgedriver.exe");
+			driver = new EdgeDriver();
 		}
+//		System.setProperty("webdriver.edge.driver", ".\\browserDrivers\\msedgedriver.exe");
+//		driver = new EdgeDriver();
 		firstname = "Hoai";
 		lastname = "Dang";
 		email = "hoai.dang" + randomNumber() + "@gmail.com";
@@ -182,7 +188,7 @@ public class User_01_Shopping {
 		Assert.assertEquals(productReviewPage.getSummaryReviewRequireMsg(), "THIS IS A REQUIRED FIELD.");
 		Assert.assertEquals(productReviewPage.getNameRequireMsg(), "THIS IS A REQUIRED FIELD.");
 		productReviewPage.inputReview("Thoughts!!");
-		productReviewPage.inputSummaryReview("Goog!");
+		productReviewPage.inputSummaryReview("Good!");
 		productReviewPage.inputName(firstname);
 		productReviewPage.clickToSumitReviewButton();
 		
