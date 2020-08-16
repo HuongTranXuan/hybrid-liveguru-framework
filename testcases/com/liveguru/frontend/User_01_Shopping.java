@@ -53,6 +53,8 @@ public class User_01_Shopping {
 		}else if(browser.equals("edge")) {
 			System.setProperty("webdriver.edge.driver", ".\\browserDrivers\\msedgedriver.exe");
 			driver = new EdgeDriver();
+		}else {
+			throw new RuntimeException("Please input your browser's name");
 		}
 //		System.setProperty("webdriver.edge.driver", ".\\browserDrivers\\msedgedriver.exe");
 //		driver = new EdgeDriver();

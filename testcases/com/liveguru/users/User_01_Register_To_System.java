@@ -21,7 +21,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 
-public class User_01_Register_To_System extends AbstractPage {
+public class User_01_Register_To_System{
 
 	WebDriver driver;
 	HomePageObject homePage;

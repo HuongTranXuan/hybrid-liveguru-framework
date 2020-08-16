@@ -84,7 +84,9 @@ public abstract class AbstractPage {
 		return alertCurrent.getText();
 	}
 
-	
+	public String getWindowHandle(WebDriver driver) {
+		return driver.getWindowHandle();
+	}
 	public void switchToWindowByID(WebDriver driver, String parentID) {
 		Set<String> allWindow = driver.getWindowHandles();
 		for (String runWindow : allWindow) {
