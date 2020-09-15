@@ -40,7 +40,7 @@ public class MobilePageObject extends AbstractPage {
 		return getElementText(driver, MobilePageUI.SUCCESS_MSG);
 	}
 	public String getParentId() {
-		return driver.getWindowHandle();
+		return getWindowHandle(driver);//driver.getWindowHandle();
 	}
 
 	public void clickToProduct(String productName) {
@@ -89,7 +89,7 @@ public class MobilePageObject extends AbstractPage {
 	}
 
 	public void switchToWindowCompare() {
-		switchToWindowByID(driver, driver.getWindowHandle());
+		switchToWindowByID(driver, getWindowHandle(driver));
 	}
 
 

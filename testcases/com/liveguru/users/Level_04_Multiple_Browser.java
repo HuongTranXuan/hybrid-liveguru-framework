@@ -30,14 +30,11 @@ public class Level_04_Multiple_Browser extends AbstractTest{
 	RegisterPageObject registerPage;
 	MyDashboardPageObject myDashboardPage;
 
-	@Parameters("browser")
+	@Parameters({"browser","url"})
 	@BeforeClass
-	public void beforeClass(String browser) {
-		driver = getBrowserDriver(browser);
-		driver.get("http://live.demoguru99.com/");
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-//		openPageUrl(driver, "http://live.demoguru99.com/");
-//		setImplicitWait(driver, 20);
+	public void beforeClass(String browser, String url) {
+		System.out.println("log browser's name: "+ browser.toUpperCase());
+		driver = getBrowserDriver(browser, url);
 		homePage = new HomePageObject(driver);
 	}
 
