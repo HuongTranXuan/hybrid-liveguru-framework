@@ -4,6 +4,8 @@ import org.testng.annotations.Test;
 
 import commons.AbstractPage;
 import commons.AbstractTest;
+import driverFactory.DriverFactory;
+import driverFactory.DriverManager;
 import pageObjects.liveguru.HomePageObject;
 import pageObjects.liveguru.LoginPageObject;
 import pageObjects.liveguru.MyDashboardPageObject;
@@ -23,8 +25,11 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 
-public class Level_05_Browser_Factory extends AbstractTest{
+public class Level_06_Factory_Pattern extends AbstractTest{
 	WebDriver driver;
+	DriverFactory driverFactory;
+	DriverManager driverManager;
+	
 	HomePageObject homePage;
 	LoginPageObject loginPage;
 	RegisterPageObject registerPage;
@@ -33,8 +38,8 @@ public class Level_05_Browser_Factory extends AbstractTest{
 	@Parameters({"browser","url"})
 	@BeforeClass
 	public void beforeClass(String browser, String url) {
-		System.out.println("log browser's name: "+ browser.toUpperCase());
-		driver = getBrowserDriver(browser, url);
+		driverManager = DriverFactory.getManagerDriver(browser);
+		driver = driverManager.getDriver(url);
 		homePage = new HomePageObject(driver);
 	}
 
